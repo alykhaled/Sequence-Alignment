@@ -1,5 +1,7 @@
 import numpy as np
 
+# download muslce and install it on your computer
+
 
 def localAllignment(match,mismatch,gap,seq1,seq2):
     matrix = [[0 for x in range( len(seq1)+1)] for y in range(len(seq2)+1)]

@@ -20,7 +20,7 @@ def globalAllignment(match,mismatch,gap,seq1,seq2):
     i = len(seq2)
     j = len(seq1)
     align1 = ""
-    align2 = ""
+    align2 = "" 
 
     while i > 0 and j > 0:
         score = matrix[i][j]
