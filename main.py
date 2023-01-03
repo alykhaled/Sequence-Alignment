@@ -6,7 +6,7 @@ from PyQt5 import uic
 import sys  # We need sys so that we can pass argv to QApplication
 import qdarktheme
 import magic
-import Bio
+from Bio import SeqIO
 from localalign import localAllignment
 from globalalign import globalAllignment
 from muscle import muscle
@@ -40,14 +40,14 @@ class MainWindow(QtWidgets.QMainWindow):
     # Or Dot plot
     def browse(self):
         #match_score , mismatch_score, gap_score
-        self.fname = QFileDialog.getOpenFileName(self, 'Open file', 'c:\\'," files (*.fasta *.txt )")
+        self.fname = QFileDialog.getOpenFileName(self, 'Open file', ''," files (*.fasta *.txt )")
         chosen_file = magic.from_file(self.fname[0],mime=True)
 
-        self.sequences = list(Bio.SeqIO.parse(self.fname[0], "fasta"))
+        self.sequences = list(SeqIO.parse(self.fname[0], "fasta"))
     
-        match_score = int(self.match_score.value())
-        mismatch_score = int(self.mismatch_score.value())
-        gap_score = int(self.gap_score.value())
+        match_score = int(self.match_score_text.toPlainText())
+        mismatch_score = int(self.mismatch_score_text.toPlainText())
+        gap_score = int(self.gap_score_text.toPlainText())
         # Metrics to test the multiple sequenc
         # I asked chatGPT and he said Percentage of Identical Pairs and Percentage of Conserved Pairs 
         # How to calculate Percentage of Identical Pairs of multiple sequence alignment ?
@@ -59,6 +59,7 @@ class MainWindow(QtWidgets.QMainWindow):
             3- Divide the count of identical pairs by the total number of pairs in the alignment and multiply by 100 to get the percentage of identical pairs.
         ''' 
 
+        
 
         if len(self.sequences) > 2: 
             multiple_alignment = muscle(self.fname[0])
@@ -67,6 +68,8 @@ class MainWindow(QtWidgets.QMainWindow):
             num_identical_pairs = 0
             num_total_pairs = len(multiple_alignment) * (len(multiple_alignment) - 1) / 2
             
+            #Percent identity is calculated by dividing the number 
+            #of nucleotide matches in the alignment by the total number of nucleotides (matched or mismatched)
             for i in range(len(multiple_alignment)): # Loop in every sequence
                 for j in range(i + 1, len(multiple_alignment)): # Loop in every other sequence
                     for k in range(len(multiple_alignment[i])): # Loop in every position
@@ -83,8 +86,19 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 self.aligned_seq_text = globalaligned
 
-        
-
+                
+        #cursor parking
+        #----------#
+        #          #
+        #          #                    
+        #----------#
+        #Stick man       
+        #----------#
+        #     0    #
+        #    /|\   # 
+        #    / \   #                    
+        #----------#
+    # Guess th 
 
 app = QtWidgets.QApplication(sys.argv)
 w = MainWindow()
