@@ -38,6 +38,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.browse_button.clicked.connect(self.browse)
         self.view_alignment_button.clicked.connect(self.align)
+        self.dotplot_button.clicked.connect(self.plot_dotplot)
+        self.phylo_tree_button.clicked.connect(self.plot_phylogenetic)
+        self.seq_logo_button.clicked.connect(self.plot_sequence)
         self.sequences = []
         # self.imported=0
 
@@ -80,8 +83,6 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.aligned_seq = f.read()
                 self.aligned_seq_text.setText(f'{str(self.aligned_seq)}')  
 
-                # sequence_logo(self) 
-                phylogenetic_tree(self)
                 # percent_identity_two()
             elif len(self.sequences) == 2:
                 match_score = int(self.match_score_box.value())
@@ -107,6 +108,42 @@ class MainWindow(QtWidgets.QMainWindow):
             msg.setWindowTitle("Error")
             msg.exec_()
 
+    def plot_dotplot(self):
+        if len(self.aligned_seq)==2:
+            dotplot(self,self.aligned_seq[0],self.aligned_seq[1]) 
+        else:
+            msg = QMessageBox() 
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Error")
+            msg.setInformativeText('Number of sequences exceeds 2')
+            msg.setWindowTitle("Error")
+            msg.exec_() 
+
+    def plot_phylogenetic(self):
+        if len(self.aligned_seq)>2:
+            phylogenetic_tree(self) 
+        else:
+            msg = QMessageBox() 
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Error")
+            msg.setInformativeText('Number of sequences less than 2')
+            msg.setWindowTitle("Error")
+            msg.exec_()
+
+    def plot_sequence(self):
+        if len(self.aligned_seq)>2:
+            sequence_logo(self)
+        else:
+            msg = QMessageBox() 
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Error")
+            msg.setInformativeText('Number of sequences less than 2')
+            msg.setWindowTitle("Error")
+            msg.exec_()
+
+
+
+    
 
         
 
