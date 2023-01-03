@@ -1,6 +1,7 @@
 import numpy as np
 
 def globalAllignment(match,mismatch,gap,seq1,seq2):
+    alignment_score=0
     matrix = [[0 for x in range( len(seq1)+1)] for y in range(len(seq2)+1)]
 
     # Fill in the first row and column
@@ -33,17 +34,23 @@ def globalAllignment(match,mismatch,gap,seq1,seq2):
             align2 += seq2[i-1]
             i -= 1
             j -= 1
+            alignment_score=alignment_score+match
         elif score == score_up + gap:
             align1 += seq1[j-1]
             align2 += "-"
             j -= 1
+            alignment_score=alignment_score+gap
         elif score == score_left + gap:
             align1 += "-"
             align2 += seq2[i-1]
             i -= 1
+            alignment_score=alignment_score+gap
         else:
             align1 += seq1[j-1]
             align2 += seq2[i-1]
             i -= 1
             j -= 1
-    return (align1[::-1],align2[::-1])
+            alignment_score=alignment_score+mismatch
+
+            
+    return [align1[::-1],align2[::-1],alignment_score]
