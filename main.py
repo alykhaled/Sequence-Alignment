@@ -88,16 +88,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
                 
         #cursor parking
-        #----------#
-        #          #
-        #          #                    
-        #----------#
-        #Stick man       
-        #----------#
-        #     0    #
-        #    /|\   # 
-        #    / \   #                    
-        #----------#
+        #-----------#
+        #           #
+        #           #                    
+        #-----------#
+        # Stick man #      
+        #-----------#
+        #     0     #
+        #    /|\    # 
+        #    / \    #                    
+        #-----------#
     # Guess th 
 
 app = QtWidgets.QApplication(sys.argv)
