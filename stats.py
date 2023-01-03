@@ -1,78 +1,45 @@
-
 import os
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio import AlignIO
 from Bio.SeqRecord import SeqRecord
 from math import log
-
-
+import Bio.SubsMat.MatrixInfo as matrices
+import numpy as np
+from sklearn.metrics import mutual_info_score
 from Bio.Align import MultipleSeqAlignment
 import time
-# def perc_identity(align):
 
-#     # a = SeqRecord(Seq("CCAAGCTGAATCAGCTGGCGGAGTCACTGAAACTGGAGCACCAGTTCCTAAGAGTTCCTTTCGAGCACTACAAGAAGACGATTCGCGCGAACCACCGCAT"), id="Alpha")
-#     # b = SeqRecord(Seq("CGAAGCTGACTCAGTGGGCGGAGTCACTGAAACTGGAGCACCAGTTCCTCAGAGTCCCCTTCGAGCACTACAAGAAGACAATTCGTGCGAACCACCGCAT"), id="Beta")
-#     # c = SeqRecord(Seq("CGAAGCTGACTCAGTTGGCAGAATCACTGAAACTGGAGCACCAGTTCCTCAGAGTCCCCTTCGAGCACTACAAGAAGACGATTCGTGCGAACCACCGCAT"), id="Gamma")
-#     # d = SeqRecord(Seq("CGAAGCTGACTCAGTTGGCAGAGTCACTGAAACTGGAGCACCAGTTCCTCAGAGTCCCCTTCGAGCACTACAAGAAGACGATTCGTGCGAACCACCGCAT"), id="Delta")
-#     # e = SeqRecord(Seq("CGAAGCTGACTCAGTTGGCGGAGTCACTGAAACTGGAGCACCAGTTCCTCAGAGTCCCCTTCGAGCACTACAAGAAGACGATTCGTGCGAACCACCGCAT"), id="Epsilon")
+import Bio.SubsMat.MatrixInfo as matrices
 
-#     # align = MultipleSeqAlignment([a, b, c], annotations={"tool": "demo"})
+def mutual_info(sequences):
+    # Calculate the MI between all pairs of positions in the alignment
+    alignment_array = np.array(sequences)
+    mi_total = 0
+    for i in range(alignment_array.shape[1]):
+        for j in range(i+1, alignment_array.shape[1]):
+            mi = mutual_info_score(alignment_array[:, i], alignment_array[:, j])
+            mi_total += mi
 
-#     start_time = time.time()
-#     if len(align) != 1:
-#         for n in range(0,len(align[0])):
-#             n=0
-#             i=0
-#             while n<len(align[0]):    
-#                 column = align[:,n]
-#                 if (column == len(column) * column[0]) == True:
-#                     i=i+1
-#                 n=n+1
+    print(f'Total MI: {mi_total}')
+    return mi_total
 
-#         match = float(i)
-#         length = float(n)
-#         global_identity = 100*(float(match/length))
-#         print(global_identity)
+# Define a function to calculate the SOP for a pair of sequences
+def calc_sop(seq1, seq2, matrix):
+    sop = 0
+    for i in range(len(seq1)):
+        sop += matrix[(seq1[i], seq2[i])]
+    return sop
 
-#     print("--- %s seconds ---" % (time.time() - start_time))
+def sop(sequences):
+    # Calculate the SOP for all pairs of sequences
+    sop_total = 0
+    blosum62 = matrices.blosum62
+    for i in range(len(sequences)):
+        for j in range(i+1, len(sequences)):
+            sop = calc_sop(sequences[i], sequences[j], blosum62)
+            sop_total += sop
 
-
-
-# def MI(sequences,i,j):
-#     Pi = Counter(sequence[i] for sequence in sequences)
-#     Pj = Counter(sequence[j] for sequence in sequences)
-#     Pij = Counter((sequence[i],sequence[j]) for sequence in sequences)   
-
-#     print(sum(Pij[(x,y)]*log(Pij[(x,y)]/(Pi[x]*Pj[y])) for x,y in Pij))
-
-def percent_identity_two():
-    records = list(SeqIO.parse("./aligned.fasta"))
-    
-    total_pairs=0
-    sop=0
-    count=0
-    countall=0 
-    for i in range(len(records)): #bamsek 1 sequence
-        for j in range(i+1,len(records)): #bamsek el ta7to
-            seq1=records[i].seq #records le awl sequence
-            seq2=records[j].seq #records for other sequences
-                    #For percent identity analysis
-            count,countall=sum_of_pairs(seq1,seq2)
-            total_pairs+=countall
-            sop=sop+count
-    percent_Identity=sop/total_pairs*100 
-    print(percent_Identity)
-
-def sum_of_pairs(a,b):
-        count = 0
-        all_pairs_count=0
-        for x, y in zip(a, b):
-            all_pairs_count+=1
-            if x == y:
-                count += 1
-        print(all_pairs_count)   
-        return count,all_pairs_count
-
-
+    print(f'Total SOP: {sop_total}')
+    return sop_total
     

@@ -23,10 +23,6 @@ def dotplot(self,seq1,seq2):
     x, y = np.where(matrix == 1)
 
     plt.scatter(x, y, s=5, c='black')
-    plt.xticks(range(len(seq1)), seq1)
-    plt.yticks(range(len(seq2)), seq2)
-
-    plt.show()
 
     self.figure = plt.figure(figsize=(15, 5), facecolor='white')
     self.canvas = FigureCanvas(self.figure)

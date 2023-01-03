@@ -19,14 +19,8 @@ from plots.dotplot import dotplot
 from plots.logo import sequence_logo
 from plots.phylogenetic import phylogenetic_tree
 
-from stats import percent_identity_two
-#error messg maybe add in try except?
-# msg = QMessageBox() 
-# msg.setIcon(QMessageBox.Critical)
-# msg.setText("Error")
-# msg.setInformativeText('Please choose working image')
-# msg.setWindowTitle("Error")
-# msg.exec_()
+from stats import sop
+
 
 class MainWindow(QtWidgets.QMainWindow):
     
@@ -70,7 +64,7 @@ class MainWindow(QtWidgets.QMainWindow):
     
 
     def align(self):
-
+        
         try:
 
             with open('temp.fasta', 'w') as f:
@@ -83,8 +77,8 @@ class MainWindow(QtWidgets.QMainWindow):
                     self.aligned_seq = f.read()
                 self.aligned_seq_text.setText(f'{str(self.aligned_seq)}')  
 
-                # percent_identity_two()
-            elif len(self.sequences) == 2:
+                sop()
+            elif len(self.sequences) == 2: 
                 match_score = int(self.match_score_box.value())
                 mismatch_score = int(self.mismatch_score_box.value())
                 gap_score = int(self.gap_score_box.value())
