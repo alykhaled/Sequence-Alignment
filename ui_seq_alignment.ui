@@ -258,8 +258,11 @@
       <property name="text">
        <string>Local Alignment</string>
       </property>
-      <property name="autoExclusive">
+      <property name="autoRepeat">
        <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QRadioButton" name="global_radio_button">
@@ -278,7 +281,7 @@
        <bool>false</bool>
       </property>
       <property name="autoExclusive">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
      </widget>
     </widget>
@@ -296,6 +299,45 @@
        </rect>
       </property>
       <layout class="QGridLayout" name="mplgridlayout"/>
+     </widget>
+     <widget class="QPushButton" name="dotplot_button">
+      <property name="geometry">
+       <rect>
+        <x>90</x>
+        <y>510</y>
+        <width>251</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Dotplot</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="phylo_tree_button">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>510</y>
+        <width>251</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Phylogenetic Tree</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="seq_logo_button">
+      <property name="geometry">
+       <rect>
+        <x>630</x>
+        <y>510</y>
+        <width>251</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Sequence Logo</string>
+      </property>
      </widget>
     </widget>
    </widget>
