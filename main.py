@@ -18,7 +18,7 @@ import random
 from plots.dotplot import dotplot
 from plots.logo import sequence_logo
 from plots.phylogenetic import phylogenetic_tree
-
+from stats import perc_identity
 #error messg maybe add in try except?
 # msg = QMessageBox() 
 # msg.setIcon(QMessageBox.Critical)
@@ -78,7 +78,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
             # sequence_logo(self) 
             phylogenetic_tree(self)
-
+            perc_identity(self.aligned_seq)
             
             # Let's assume we have an MSA stored in a list of strings called 'sequences'
             # num_identical_pairs = 0
