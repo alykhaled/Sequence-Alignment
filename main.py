@@ -39,7 +39,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.browse_button.clicked.connect(self.browse)
         self.view_alignment_button.clicked.connect(self.align)
         self.sequences = []
-        self.imported=0
+        # self.imported=0
 
     # We will use bio python for the phylogenetic tree
     # We already did dot plot
@@ -54,63 +54,59 @@ class MainWindow(QtWidgets.QMainWindow):
             with open(self.fname[0], 'r') as f:
                 data = f.read()
             chosen_file = magic.from_file(self.fname[0],mime=True)
-
-            self.sequences = list(Bio.SeqIO.parse(self.fname[0], "fasta"))
-
+            # self.sequences = list(Bio.SeqIO.parse(self.fname[0], "fasta"))
             self.enter_seq_text.setText(f'{str(data)}')
-
-            self.imported=1
+            # self.imported=1
         except:
-
             msg = QMessageBox() 
             msg.setIcon(QMessageBox.Critical)
             msg.setText("Error")
             msg.setInformativeText('Please choose correct file or enter sequence')
             msg.setWindowTitle("Error")
             msg.exec_()
-
-
-
-
-        # else:
-
-        #     self.sequences = list(Bio.SeqIO.parse(self.enter_seq_text.value))
     
 
     def align(self):
 
-       if self.imported==0 and self.enter_seq_text.value !="": 
-        self.sequences = list(Bio.SeqIO.parse(self.enter_seq_text.value, "fasta")) #probably wrong needs path lol
+        try:
 
+            with open('temp.fasta', 'w') as f:
+                f.write(self.enter_seq_text.toPlainText())
 
-        if len(self.sequences) > 2: 
-            multiple_alignment = muscle(self.fname[0])
-            with open('./data/alig.fasta', 'r') as f:
-                self.aligned_seq = f.read()
-            self.aligned_seq_text.setText(f'{str(self.aligned_seq)}')  
+            self.sequences = list(Bio.SeqIO.parse('temp.fasta', "fasta"))
+            if len(self.sequences) > 2: 
+                multiple_alignment = muscle('./temp.fasta')
+                with open('./data/alig.fasta', 'r') as f:
+                    self.aligned_seq = f.read()
+                self.aligned_seq_text.setText(f'{str(self.aligned_seq)}')  
 
-            # sequence_logo(self) 
-            phylogenetic_tree(self)
-            percent_identity_two()
+                # sequence_logo(self) 
+                phylogenetic_tree(self)
+                # percent_identity_two()
+            elif len(self.sequences) == 2:
+                match_score = int(self.match_score_box.value())
+                mismatch_score = int(self.mismatch_score_box.value())
+                gap_score = int(self.gap_score_box.value())
+                localaligned = localAllignment(match_score,mismatch_score,gap_score,self.sequences[0].seq,self.sequences[1].seq)
+                globalaligned = globalAllignment(match_score,mismatch_score,gap_score,self.sequences[0].seq,self.sequences[1].seq)
+                if self.local_radio_button.isChecked():
+                    self.aligned_seq = localaligned
+                else:
+                    self.aligned_seq = globalaligned
 
-            
+                alignedFasta = ">"+self.sequences[0].id + "\n" + self.aligned_seq[0] + "\n\n" + ">"+self.sequences[1].id + "\n" + self.aligned_seq[1]
+                self.aligned_seq_text.setText(f'{str(alignedFasta)}') 
 
-        elif len(self.sequences) == 2:
-            match_score = int(self.match_score_box.value())
-            mismatch_score = int(self.mismatch_score_box.value())
-            gap_score = int(self.gap_score_box.value())
+                # dotplot(self,self.aligned_seq[0],self.aligned_seq[1]) 
 
-            localaligned = localAllignment(match_score,mismatch_score,gap_score,self.sequences[0].seq,self.sequences[1].seq)
-            globalaligned = globalAllignment(match_score,mismatch_score,gap_score,self.sequences[0].seq,self.sequences[1].seq)
-            if self.local_radio_button.isChecked():
-                self.aligned_seq = localaligned
-            else:
-                self.aligned_seq = globalaligned
+        except:
+            msg = QMessageBox() 
+            msg.setIcon(QMessageBox.Critical)
+            msg.setText("Error")
+            msg.setInformativeText('Please Enter Sequences')
+            msg.setWindowTitle("Error")
+            msg.exec_()
 
-            data = self.aligned_seq[0] + '\n' + self.aligned_seq[1]
-            self.aligned_seq_text.setText(f'{str(data)}') 
-
-            dotplot(self,self.aligned_seq[0],self.aligned_seq[1])   
 
         
 
