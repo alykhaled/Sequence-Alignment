@@ -35,6 +35,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dotplot_button.clicked.connect(self.plot_dotplot)
         self.phylo_tree_button.clicked.connect(self.plot_phylogenetic)
         self.seq_logo_button.clicked.connect(self.plot_sequence)
+        self.save_alignment_button.clicked.connect(self.save_alignment)
         self.sequences = []
         self.alignment_score=0
         # self.imported=0
@@ -66,7 +67,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def align(self):
         
-        # try:
+        # try: 
 
         with open('temp.fasta', 'w') as f:
             f.write(self.enter_seq_text.toPlainText())
@@ -74,9 +75,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sequences = list(Bio.SeqIO.parse('temp.fasta', "fasta"))
         if len(self.sequences) > 2: 
             multiple_alignment = muscle('./temp.fasta')
-            with open('./data/alig.fasta', 'r') as f:
-                self.aligned_seq = f.read()
-            self.aligned_seq_text.setText(f'{str(self.aligned_seq)}')  
+            with open('./data/aligned.fasta', 'r') as f:
+                aligned_seq = f.read()
+            self.aligned_seq_text.setText(f'{str(aligned_seq)}')  
 
             # sop()
         elif len(self.sequences) == 2: 
@@ -86,17 +87,16 @@ class MainWindow(QtWidgets.QMainWindow):
             localaligned= localAllignment(match_score,mismatch_score,gap_score,self.sequences[0].seq,self.sequences[1].seq)
             globalaligned= globalAllignment(match_score,mismatch_score,gap_score,self.sequences[0].seq,self.sequences[1].seq)
             if self.local_radio_button.isChecked():
-                self.aligned_seq = (localaligned[0],localaligned[1])
+                aligned_seq = (localaligned[0],localaligned[1])
                 self.alignment_score=localaligned[2]
             else:
-                self.aligned_seq = (globalaligned[0],globalaligned[1])
+                aligned_seq = (globalaligned[0],globalaligned[1])
                 self.alignment_score=globalaligned[2]
 
-            alignedFasta = ">"+self.sequences[0].id + "\n" + self.aligned_seq[0] + "\n\n" + ">"+self.sequences[1].id + "\n" + self.aligned_seq[1]
+            alignedFasta = ">"+self.sequences[0].id + "\n" + aligned_seq[0] + "\n\n" + ">"+self.sequences[1].id + "\n" + aligned_seq[1]
             self.aligned_seq_text.setText(f'{str(alignedFasta)}') 
-            # self.alignment_score.setText(f'{(self.alignment_score)}') 
-            print(self.alignment_score)
 
+            print(self.alignment_score)
 
             self.disp_alignment_score.setText(f'{(self.alignment_score)}')
 
@@ -109,8 +109,8 @@ class MainWindow(QtWidgets.QMainWindow):
         #     msg.exec_()
 
     def plot_dotplot(self):
-        if len(self.aligned_seq)==2:
-            dotplot(self,self.aligned_seq[0],self.aligned_seq[1]) 
+        if len(aligned_seq)==2:
+            dotplot(self,aligned_seq[0],aligned_seq[1]) 
         else:
             msg = QMessageBox() 
             msg.setIcon(QMessageBox.Critical)
@@ -120,7 +120,7 @@ class MainWindow(QtWidgets.QMainWindow):
             msg.exec_() 
 
     def plot_phylogenetic(self):
-        if len(self.aligned_seq)>2:
+        if len(aligned_seq)>2:
             phylogenetic_tree(self) 
         else:
             msg = QMessageBox() 
@@ -131,7 +131,7 @@ class MainWindow(QtWidgets.QMainWindow):
             msg.exec_()
 
     def plot_sequence(self):
-        if len(self.aligned_seq)>2:
+        if len(aligned_seq)>2:
             sequence_logo(self)
         else:
             msg = QMessageBox() 
@@ -140,6 +140,12 @@ class MainWindow(QtWidgets.QMainWindow):
             msg.setInformativeText('Number of sequences less than 2')
             msg.setWindowTitle("Error")
             msg.exec_()
+
+    def save_alignment(self):
+
+
+        with open('./data/saved_sequence.fasta', 'w+') as f: # save and overwrite in saved_seq fasta file
+            f.write(self.aligned_seq_text.toPlainText())
 
 
 
