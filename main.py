@@ -18,6 +18,8 @@ import random
 from plots.dotplot import dotplot
 from plots.logo import sequence_logo
 from plots.phylogenetic import phylogenetic_tree
+from stats import percent_identity
+from mutual_info import MI, sequences_matrix 
 
 # from stats import sop
 
@@ -72,11 +74,16 @@ class MainWindow(QtWidgets.QMainWindow):
             f.write(self.enter_seq_text.toPlainText())
 
         self.sequences = list(Bio.SeqIO.parse('temp.fasta', "fasta"))
+        
         if len(self.sequences) > 2: 
             multiple_alignment = muscle('./temp.fasta')
             with open('./data/alig.fasta', 'r') as f:
                 self.aligned_seq = f.read()
-            self.aligned_seq_text.setText(f'{str(self.aligned_seq)}')  
+            self.aligned_seq_text.setText(f'{str(self.aligned_seq)}')
+            self.MI_output = MI(sequences_matrix,4,4)
+            self.mut_info.setText(f'{(self.MI_output)}')   
+            
+            
 
             # sop()
         elif len(self.sequences) == 2: 
@@ -99,6 +106,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
             self.disp_alignment_score.setText(f'{(self.alignment_score)}')
+            percent_identity_output = percent_identity()
+            self.percent_identity.setText(f'{(percent_identity_output)}')
+            ###### MUTUAL INFO ######
+           
+            
 
         # except:
         #     msg = QMessageBox() 
@@ -111,6 +123,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def plot_dotplot(self):
         if len(self.aligned_seq)==2:
             dotplot(self,self.aligned_seq[0],self.aligned_seq[1]) 
+            percent_identity()
         else:
             msg = QMessageBox() 
             msg.setIcon(QMessageBox.Critical)
