@@ -258,6 +258,9 @@
       <property name="text">
        <string>Local Alignment</string>
       </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
      </widget>
      <widget class="QRadioButton" name="global_radio_button">
       <property name="geometry">
@@ -270,6 +273,12 @@
       </property>
       <property name="text">
        <string>Global Alignment</string>
+      </property>
+      <property name="autoRepeat">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
       </property>
      </widget>
     </widget>
