@@ -19,7 +19,7 @@ from plots.dotplot import get_dotplot
 from plots.logo import sequence_logo
 from plots.phylogenetic import phylogenetic_tree
 from plots.seqIdentity import sequence_identity_plot
-# from stats import sop
+from stats import sum_of_pairs, calc_sop
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -106,6 +106,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def align(self):
         if len(self.sequences) > 2: 
             multiple_alignment = muscle('./temp.fasta')
+            sop_output = sum_of_pairs()
+            self.sum_of_pairs.setText(f'{(sop_output)}')
             with open('./data/aligned.fasta', 'r') as f:
                 aligned_seq_raw = f.read()
             self.aligned_seq_text.setText(f'{str(aligned_seq_raw)}')
