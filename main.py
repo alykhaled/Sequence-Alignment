@@ -142,7 +142,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def plot_dotplot(self):
         if len(self.sequences)==2:
-            dotplot(self,aligned_seq[0],aligned_seq[1]) 
+            self.dotplot(self,aligned_seq[0],aligned_seq[1]) 
         else:
             msg = QMessageBox() 
             msg.setIcon(QMessageBox.Critical)
