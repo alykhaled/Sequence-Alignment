@@ -15,7 +15,7 @@ from PyQt5.uic import loadUi
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 import numpy as np
 import random
-from plots.dotplot import dotplot
+from plots.dotplot import get_dotplot
 from plots.logo import sequence_logo
 from plots.phylogenetic import phylogenetic_tree
 from plots.seqIdentity import sequence_identity_plot
@@ -123,14 +123,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
             if self.local_radio_button.isChecked():
                 localaligned= localAllignment(match_score,mismatch_score,gap_score,self.sequences[0].seq,self.sequences[1].seq)
-                aligned_seq = (localaligned[0],localaligned[1])
+                self.aligned_seq = (localaligned[0],localaligned[1])
                 self.alignment_score=localaligned[2]
             else:
                 globalaligned= globalAllignment(match_score,mismatch_score,gap_score,self.sequences[0].seq,self.sequences[1].seq)
-                aligned_seq = (globalaligned[0],globalaligned[1])
+                self.aligned_seq = (globalaligned[0],globalaligned[1])
                 self.alignment_score=globalaligned[2]
 
-            alignedFasta = ">"+self.sequences[0].id + "\n" + aligned_seq[0] + "\n\n" + ">"+self.sequences[1].id + "\n" + aligned_seq[1]
+            alignedFasta = ">"+self.sequences[0].id + "\n" + self.aligned_seq[0] + "\n\n" + ">"+self.sequences[1].id + "\n" + self.aligned_seq[1]
             self.aligned_seq_text.setText(f'{str(alignedFasta)}') 
 
             print(self.alignment_score)
@@ -142,7 +142,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def plot_dotplot(self):
         if len(self.sequences)==2:
-            self.dotplot(self,aligned_seq[0],aligned_seq[1]) 
+            get_dotplot(self,self.aligned_seq[0],self.aligned_seq[1]) 
         else:
             msg = QMessageBox() 
             msg.setIcon(QMessageBox.Critical)
