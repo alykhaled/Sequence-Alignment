@@ -18,7 +18,7 @@ import random
 from plots.dotplot import dotplot
 from plots.logo import sequence_logo
 from plots.phylogenetic import phylogenetic_tree
-from stats import percent_identity
+from stats import percent_identity, sum_of_pairs, calc_sop
 from mutual_info import MI, sequences_matrix 
 
 # from stats import sop
@@ -77,6 +77,8 @@ class MainWindow(QtWidgets.QMainWindow):
         
         if len(self.sequences) > 2: 
             multiple_alignment = muscle('./temp.fasta')
+            sop_output = sum_of_pairs()
+            self.sum_of_pairs.setText(f'{(sop_output)}')
             with open('./data/alig.fasta', 'r') as f:
                 self.aligned_seq = f.read()
             self.aligned_seq_text.setText(f'{str(self.aligned_seq)}')
