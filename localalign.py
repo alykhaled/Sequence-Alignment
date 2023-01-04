@@ -1,7 +1,5 @@
 import numpy as np
 
-# download muslce and install it on your computer
-
 
 def localAllignment(match,mismatch,gap,seq1,seq2):
     alignment_score=0
@@ -24,17 +22,23 @@ def localAllignment(match,mismatch,gap,seq1,seq2):
 
             matrix[i+1][j+1] = max(matrix[i][j+1] + gap, matrix[i+1][j] + gap, matrix[i][j] + score,0)
 
-            if matrix[i+1][j+1] > maxValue:
-                maxValue = matrix[i+1][j+1]
-                maxR = i+1
-                maxC = j+1
-
-    i = maxR
-    j = maxC
+    
+    start_point=np.where(matrix==np.max(matrix))
+    start_c= start_point[1]
+    start_r=start_point[0]
     align1 = ""
     align2 = ""
 
-    while i > 0 and j > 0:
+
+
+
+    start_point=np.where(matrix==np.max(matrix))
+    start_c= start_point[1]
+    start_r=start_point[0]
+
+
+
+    while matrix[i][j]!=0:
         score = matrix[i][j]
         score_diag = matrix[i-1][j-1]
         score_up = matrix[i][j-1]
