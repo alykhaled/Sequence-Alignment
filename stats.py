@@ -6,55 +6,20 @@ from collections import Counter
 
 def percent_identity():
     fasta_read = open("./data/aligned.fasta")
-# sequences= [i for i in SeqIO.parse(fasta_read,'fasta')] # loop over the sequences and place each in a variable
 
     sequences = list(SeqIO.parse(fasta_read, "fasta"))
-    # sequences = ['ABCD', 'ABCD', 'ABCD', 'ABCD']
-    total_pairs=0
-    sop=0
-    count=0
-    countall=0 
+    sequences = [str(record.seq) for record in sequences]
+    num_identical_pairs = 0
+    num_total_pairs = len(sequences) * (len(sequences) - 1) / 2
 
-    class my_dictionary(dict): 
-        # __init__ function 
-        def __init__(self): 
-            self = dict()   
-        # Function to add key:value 
-        def add(self, key, value): 
-            self[key] = value 
-    residue_frequency = my_dictionary() 
+    for i in range(len(sequences)):
+        for j in range(i + 1, len(sequences)):
+            for k in range(len(sequences[i])):
+                if sequences[i][k] == sequences[j][k]:
+                    num_identical_pairs += 1
 
-    def compare(a,b):
-            identical_pairs_count = 0
-            all_pairs_count= 0
-            mismatch_pairs_count = 0
-            gaps_count = 0
-            for x, y in zip(a, b):
-                if x!='-' and y!='-':
-                    all_pairs_count+=1
-                    if x == y:
-                        identical_pairs_count += 1
-                    else:
-                        mismatch_pairs_count +=1
-                else:
-                    gaps_count +=1
-            
-            return identical_pairs_count,all_pairs_count
-            
-
-
-    for i in range(len(sequences)): 
-     for j in range(i+1,len(sequences)): 
-        seq1=sequences[i].seq 
-        seq2=sequences[j].seq 
-
-        identical_pairs_count,all_pairs_count=compare(seq1,seq2)
-        
-        total_pairs+=all_pairs_count
-
-       
-     return identical_pairs_count/total_pairs*100 
-
+    percentage_identical_pairs = (num_identical_pairs / (num_total_pairs*len(sequences[0]))) * 100
+    return percentage_identical_pairs
 
 def sum_of_pairs():
     fasta_read = open("./data/aligned.fasta")
