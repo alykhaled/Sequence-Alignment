@@ -6,7 +6,7 @@ def muscle(fasta_file):
     output = subprocess.check_output(
         ["./muscle5.1.win64.exe",
             "-align", fasta_file,
-            "-output", r"./data/alig.fasta"], text=True)
+            "-output", r"./data/aligned.fasta"], text=True)
     return output
 
 # A5rice- mohra

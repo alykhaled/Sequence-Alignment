@@ -20,7 +20,8 @@ from plots.logo import sequence_logo
 from plots.phylogenetic import phylogenetic_tree
 from plots.seqIdentity import sequence_identity_plot
 # from stats import sop
-
+from stats import percent_identity, sum_of_pairs, calc_sop
+from mutual_info import MI,sequences_matrix
 
 class MainWindow(QtWidgets.QMainWindow):
     
@@ -45,7 +46,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.fname = QFileDialog.getOpenFileName(self, 'Open file', ''," files (*.fasta)")
             with open(self.fname[0], 'r') as f:
                 data = f.read()
-            chosen_file = magic.from_file(self.fname[0],mime=True)
             self.enter_seq_text.setText(f'{str(data)}')
         except:
             msg = QMessageBox() 
@@ -116,6 +116,10 @@ class MainWindow(QtWidgets.QMainWindow):
             self.mismatch_score_box.setEnabled(False)
             self.gap_score_box.setEnabled(False)
 
+            self.MI_output = MI(sequences_matrix,4,4)
+            self.mut_info.setText(f'{(self.MI_output)}')   
+
+
         elif len(self.sequences) == 2: 
             match_score = int(self.match_score_box.value())
             mismatch_score = int(self.mismatch_score_box.value())
@@ -134,15 +138,19 @@ class MainWindow(QtWidgets.QMainWindow):
             self.aligned_seq_text.setText(f'{str(alignedFasta)}') 
 
             print(self.alignment_score)
-            with open('./data/alig.fasta', 'w+') as f: # save and overwrite in saved_seq fasta file
+            with open('./data/aligned.fasta', 'w+') as f: # save and overwrite in saved_seq fasta file
                 f.write(self.aligned_seq_text.toPlainText())
 
             self.disp_alignment_score.setText(f'{(self.alignment_score)}')
+        
+        self.sum_of_pairs.setText(f'{(sum_of_pairs())}')
+        percent_identity_output = percent_identity()
+        self.percent_identity.setText(f'{(percent_identity_output)}')
 
 
     def plot_dotplot(self):
         if len(self.sequences)==2:
-            get_dotplot(self,self.aligned_seq[0],self.aligned_seq[1]) 
+            get_dotplot(self,self.sequences[0],self.sequences[1]) 
         else:
             msg = QMessageBox() 
             msg.setIcon(QMessageBox.Critical)

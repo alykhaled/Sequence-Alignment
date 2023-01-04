@@ -10,7 +10,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 
 def sequence_identity_plot(self):
-    alignment = alignread("./data/alig.fasta", "fasta")
+    alignment = alignread("./data/aligned.fasta", "fasta")
     identity = calculate_percent_identity(alignment)
 
     # Create a new figure and set up the x- and y-axes

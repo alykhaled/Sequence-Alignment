@@ -18,7 +18,7 @@ def phylogenetic_tree(self):
 
 
     # Read the multiple sequence alignment
-    alignment = AlignIO.read("./data/alig.fasta", "fasta")
+    alignment = AlignIO.read("./data/aligned.fasta", "fasta")
 
     # Create the MultipleSeqAlignment object
     msa = MultipleSeqAlignment(alignment)
