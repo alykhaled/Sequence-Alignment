@@ -8,9 +8,9 @@ import qdarktheme
 import magic
 import Bio
 from Bio import SeqIO
-from localalign import localAllignment
-from globalalign import globalAllignment
-from muscle import muscle
+from alignments.localalign import localAllignment
+from alignments.globalalign import globalAllignment
+from alignments.muscle import muscle
 from PyQt5.uic import loadUi
 from matplotlib.backends.backend_qt5agg import (NavigationToolbar2QT as NavigationToolbar)
 import numpy as np

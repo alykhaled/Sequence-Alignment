@@ -1,13 +1,10 @@
 import Bio
-from localalign import localAllignment
-from globalalign import globalAllignment
 from Bio import AlignIO
 from PIL import Image
 import io
 from Bio.Phylo.TreeConstruction import MultipleSeqAlignment
 from Bio.Phylo.TreeConstruction import DistanceCalculator
 from Bio.Phylo.TreeConstruction import DistanceTreeConstructor
-from muscle import muscle
 import matplotlib.pyplot as plt
 from Bio import Phylo
 from matplotlib.backends.backend_qt5agg import FigureCanvas
