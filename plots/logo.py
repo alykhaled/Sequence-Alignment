@@ -24,18 +24,14 @@ def sequence_logo(self):
 
     pic = io.BytesIO(eps)
     img = Image.open(pic)
-    # img.save("logo.png")
 
-
-
-
-
-    self.figure = plt.figure(figsize=(50, 20), facecolor='white')
+    self.figure = plt.figure()
     self.canvas = FigureCanvas(self.figure)
     self.canvas.axes = self.canvas.figure.add_subplot(111)
     self.mplgridlayout.addWidget(self.canvas, 0, 0, 1, 1)
-#     plt.axis('on')
     self.canvas.axes.clear()
+    # Remove the axes
+    self.canvas.axes.set_axis_off()
 
     self.canvas.axes.set_title('Sequence Logo')
 
